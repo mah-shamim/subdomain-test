@@ -15,4 +15,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+    // return redirect()->route('sub');
+});
+
+Route::domain('{account}' . env('APP_URL'))->group(function () {
+    Route::get('user/{id}', function ($account, $id) {
+        return [
+            'Domain part' => $account,
+            'Params' => $id
+        ];
+    })->name('sub');
 });
