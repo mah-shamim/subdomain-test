@@ -15,14 +15,23 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
-    // return redirect()->route('sub');
 });
 
-Route::domain('{account}' . env('APP_URL'))->group(function () {
-    Route::get('user/{id}', function ($account, $id) {
-        return [
-            'Domain part' => $account,
-            'Params' => $id
-        ];
-    })->name('sub');
+Route::get('/', function () {
+    return 'First sub domain';
+})->domain('blog.' . env('APP_URL'));
+
+Route::domain('blog.' . env('APP_URL'))->group(function () {
+    Route::get('posts', function () {
+        return 'Second subdomain landing page';
+    });
+    Route::get('post/{id}', function ($id) {
+        return 'Post ' . $id . ' in second subdomain';
+    });
+});
+
+Route::domain('{username}.' . env('APP_URL'))->group(function () {
+    Route::get('post/{id}', function ($username, $id) {
+        return 'User ' . $username . ' is trying to read post ' . $id;
+    });
 });
